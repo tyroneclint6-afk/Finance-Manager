@@ -1,172 +1,1005 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Finance Manager - MV Software Empire</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js for interactive analytics -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#eff6ff',
+                            100: '#dbeafe',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            900: '#1e3a8a',
+                            dark: '#0f172a',
+                            card: '#1e293b'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
     <style>
-        :root {
-            --primary-color: #0f172a;
-            --accent-color: #2563eb;
-            --light-bg: #f8fafc;
-            --text-color: #334155;
-            --white: #ffffff;
-        }
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-        }
         body {
-            background-color: var(--light-bg);
-            color: var(--text-color);
-            line-height: 1.6;
+            font-family: 'Inter', sans-serif;
+            background-color: #0b0f19;
+            color: #f1f5f9;
         }
-        header {
-            background-color: var(--primary-color);
-            color: var(--white);
-            padding: 1.5rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        .tab-content {
+            display: none;
         }
-        header h1 {
-            font-size: 1.5rem;
-            letter-spacing: 0.5px;
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease-in-out;
         }
-        nav a {
-            color: var(--white);
-            text-decoration: none;
-            margin-left: 1.5rem;
-            font-size: 0.95rem;
-            transition: color 0.2s;
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(4px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-        nav a:hover {
-            color: var(--accent-color);
+        /* Custom Scrollbars */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
         }
-        .hero {
-            text-align: center;
-            padding: 4rem 1rem;
-            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-            color: var(--white);
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
         }
-        .hero h2 {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
         }
-        .hero p {
-            font-size: 1.1rem;
-            color: #94a3b8;
-            max-width: 600px;
-            margin: 0 auto 2rem auto;
-        }
-        .container {
-            max-width: 1100px;
-            margin: -3rem auto 3rem auto;
-            padding: 0 1rem;
-            position: relative;
-        }
-        .pricing-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-        .card {
-            background: var(--white);
-            border-radius: 12px;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-            padding: 2.5rem 2rem;
-            text-align: center;
-            border-top: 4px solid var(--accent-color);
-        }
-        .card h3 {
-            font-size: 1.5rem;
-            margin-bottom: 0.5rem;
-            color: var(--primary-color);
-        }
-        .price {
-            font-size: 2.25rem;
-            font-weight: bold;
-            color: var(--accent-color);
-            margin: 1.5rem 0;
-        }
-        .features {
-            list-style: none;
-            margin-bottom: 2rem;
-            text-align: left;
-        }
-        .features li {
-            padding: 0.5rem 0;
-            border-bottom: 1px solid #f1f5f9;
-            font-size: 0.95rem;
-        }
-        .btn-container {
-            margin-top: 1.5rem;
-        }
-        footer {
-            text-align: center;
-            padding: 2rem;
-            color: #64748b;
-            font-size: 0.85rem;
+        ::-webkit-scrollbar-thumb:hover {
+            background: #2563eb;
         }
     </style>
 </head>
-<body>
+<body class="min-h-screen flex flex-col justify-between selection:bg-blue-600 selection:text-white">
 
-    <header>
-        <h1>MV Software Empire</h1>
-        <nav>
-            <a href="#features">Features</a>
-            <a href="#pricing">Get Access</a>
-            <a href="mailto:support@mvsoftwareempire.com">Support</a>
-        </nav>
-    </header>
-
-    <section class="hero">
-        <h2>Finance Manager Portal</h2>
-        <p>Take full control of your enterprise income, cash flow analytics, and transaction ledgers with our all-in-one financial dashboard.</p>
-    </section>
-
-    <div class="container" id="pricing">
-        <div class="pricing-grid">
-            <!-- Standard Plan -->
-            <div class="card">
-                <h3>Standard Plan</h3>
-                <div class="price">$29.99</div>
-                <ul class="features">
-                    <li>✓ Executive Dashboard Access</li>
-                    <li>✓ Standard Transaction Ledger</li>
-                    <li>✓ Basic Cash Flow Reports</li>
-                    <li>✓ Email Support</li>
-                </ul>
-                <div class="btn-container">
-                    <!-- Replace with your actual PayPal button code/link -->
-                    <a href="https://www.paypal.com" target="_blank" style="background:var(--accent-color); color:white; padding: 0.75rem 1.5rem; border-radius: 6px; text-decoration: none; font-weight: 600; display: inline-block;">Buy Standard Portal</a>
+    <!-- Top Navigation Header -->
+    <header class="bg-slate-900 border-b border-slate-800 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Brand Logo & Name -->
+                <div class="flex items-center space-x-3 cursor-pointer" onclick="switchTab('dashboard')">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center text-white shadow-lg shadow-blue-500/30">
+                        <i class="fa-solid fa-chart-line text-lg"></i>
+                    </div>
+                    <div>
+                        <span class="font-bold text-lg tracking-tight text-white block leading-tight">Finance Manager</span>
+                        <span class="text-xs text-blue-400 font-medium">by MV Software Empire</span>
+                    </div>
                 </div>
-            </div>
 
-            <!-- Pro Plan -->
-            <div class="card" style="border-top-color: #10b981;">
-                <h3>Pro Executive</h3>
-                <div class="price">$59.99</div>
-                <ul class="features">
-                    <li>✓ Advanced Real-Time Analytics</li>
-                    <li>✓ Multi-Account Management</li>
-                    <li>✓ Automated Exportable Ledgers</li>
-                    <li>✓ Priority Customer Support</li>
-                </ul>
-                <div class="btn-container">
-                    <!-- Replace with your actual PayPal button code/link -->
-                    <a href="https://www.paypal.com" target="_blank" style="background:#10b981; color:white; padding: 0.75rem 1.5rem; border-radius: 6px; text-decoration: none; font-weight: 600; display: inline-block;">Buy Pro Portal</a>
+                <!-- Desktop Navigation Tabs -->
+                <nav class="hidden md:flex space-x-1 lg:space-x-2">
+                    <button onclick="switchTab('dashboard')" id="nav-dashboard" class="tab-btn px-3 py-2 rounded-lg text-sm font-medium transition-all text-blue-400 bg-slate-800 border border-blue-500/30 flex items-center gap-2">
+                        <i class="fa-solid fa-gauge-high"></i> Dashboard
+                    </button>
+                    <button onclick="switchTab('accounts')" id="nav-accounts" class="tab-btn px-3 py-2 rounded-lg text-sm font-medium transition-all text-slate-300 hover:text-white hover:bg-slate-800 flex items-center gap-2">
+                        <i class="fa-solid fa-wallet"></i> Accounts
+                    </button>
+                    <button onclick="switchTab('ledger')" id="nav-ledger" class="tab-btn px-3 py-2 rounded-lg text-sm font-medium transition-all text-slate-300 hover:text-white hover:bg-slate-800 flex items-center gap-2">
+                        <i class="fa-solid fa-list-check"></i> Ledger
+                    </button>
+                    <button onclick="switchTab('analytics')" id="nav-analytics" class="tab-btn px-3 py-2 rounded-lg text-sm font-medium transition-all text-slate-300 hover:text-white hover:bg-slate-800 flex items-center gap-2">
+                        <i class="fa-solid fa-chart-pie"></i> Analytics
+                    </button>
+                    <button onclick="switchTab('pricing')" id="nav-pricing" class="tab-btn px-3 py-2 rounded-lg text-sm font-medium transition-all text-slate-300 hover:text-white hover:bg-slate-800 flex items-center gap-2">
+                        <i class="fa-solid fa-tags"></i> Pricing & Buy
+                    </button>
+                    <button onclick="switchTab('customer-portal')" id="nav-customer-portal" class="tab-btn px-3 py-2 rounded-lg text-sm font-medium transition-all text-slate-300 hover:text-white hover:bg-slate-800 flex items-center gap-2">
+                        <i class="fa-solid fa-user-lock"></i> Client Access
+                    </button>
+                </nav>
+
+                <!-- Status Badge -->
+                <div class="hidden sm:flex items-center space-x-3">
+                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 mr-1.5 animate-pulse"></span> System Active
+                    </span>
+                </div>
+
+                <!-- Mobile menu button -->
+                <div class="md:hidden flex items-center">
+                    <button onclick="toggleMobileMenu()" class="text-slate-400 hover:text-white p-2 rounded-md focus:outline-none">
+                        <i class="fa-solid fa-bars text-xl"></i>
+                    </button>
                 </div>
             </div>
         </div>
-    </div>
 
-    <footer>
-        &copy; 2026 MV Software Empire. All rights reserved. Hosted via GitHub Pages.
+        <!-- Mobile Navigation Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-slate-900 border-b border-slate-800 px-4 pt-2 pb-4 space-y-2">
+            <button onclick="switchTab('dashboard')" class="w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-slate-200 hover:bg-slate-800 flex items-center gap-3">
+                <i class="fa-solid fa-gauge-high text-blue-400 w-5"></i> Dashboard
+            </button>
+            <button onclick="switchTab('accounts')" class="w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-slate-200 hover:bg-slate-800 flex items-center gap-3">
+                <i class="fa-solid fa-wallet text-blue-400 w-5"></i> Accounts
+            </button>
+            <button onclick="switchTab('ledger')" class="w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-slate-200 hover:bg-slate-800 flex items-center gap-3">
+                <i class="fa-solid fa-list-check text-blue-400 w-5"></i> Ledger
+            </button>
+            <button onclick="switchTab('analytics')" class="w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-slate-200 hover:bg-slate-800 flex items-center gap-3">
+                <i class="fa-solid fa-chart-pie text-blue-400 w-5"></i> Analytics
+            </button>
+            <button onclick="switchTab('pricing')" class="w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-slate-200 hover:bg-slate-800 flex items-center gap-3">
+                <i class="fa-solid fa-tags text-blue-400 w-5"></i> Pricing & Buy
+            </button>
+            <button onclick="switchTab('customer-portal')" class="w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-slate-200 hover:bg-slate-800 flex items-center gap-3">
+                <i class="fa-solid fa-user-lock text-blue-400 w-5"></i> Client Access
+            </button>
+        </div>
+    </header>
+
+    <!-- Notification Toast Container -->
+    <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col space-y-2 pointer-events-none"></div>
+
+    <!-- Main Content Area -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1 w-full">
+
+        <!-- 1. EXECUTIVE DASHBOARD TAB -->
+        <div id="tab-dashboard" class="tab-content active space-y-6">
+            <!-- Hero Summary Bar -->
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-slate-900 border border-slate-800 p-6 rounded-2xl">
+                <div>
+                    <h2 class="text-2xl font-bold text-white tracking-tight">Executive Dashboard</h2>
+                    <p class="text-slate-400 text-sm mt-1">Real-time overview of business revenue, expenses, and current cash position.</p>
+                </div>
+                <div class="flex items-center gap-3">
+                    <button onclick="openModal('add-transaction-modal')" class="px-4 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-medium rounded-xl text-sm transition-all shadow-lg shadow-blue-600/30 flex items-center gap-2">
+                        <i class="fa-solid fa-plus"></i> Log Transaction
+                    </button>
+                    <button onclick="exportFinancialStatement()" class="px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-200 font-medium rounded-xl text-sm border border-slate-700 transition-all flex items-center gap-2">
+                        <i class="fa-solid fa-file-export"></i> Statement
+                    </button>
+                </div>
+            </div>
+
+            <!-- Key Metric Cards -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                <!-- Total Balance Card -->
+                <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl relative overflow-hidden group hover:border-blue-500/50 transition-all">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-semibold uppercase tracking-wider text-slate-400">Total Net Balance</span>
+                        <div class="w-9 h-9 rounded-lg bg-blue-500/10 text-blue-400 flex items-center justify-center">
+                            <i class="fa-solid fa-vault"></i>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <h3 class="text-3xl font-extrabold text-white tracking-tight" id="dash-total-balance">$0.00</h3>
+                        <p class="text-xs text-emerald-400 mt-1 flex items-center gap-1">
+                            <i class="fa-solid fa-arrow-trend-up"></i> <span id="dash-balance-change">+12.4% this month</span>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Monthly Income Card -->
+                <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl relative overflow-hidden group hover:border-emerald-500/50 transition-all">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-semibold uppercase tracking-wider text-slate-400">Total Revenue</span>
+                        <div class="w-9 h-9 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center">
+                            <i class="fa-solid fa-circle-arrow-down"></i>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <h3 class="text-3xl font-extrabold text-emerald-400 tracking-tight" id="dash-total-income">$0.00</h3>
+                        <p class="text-xs text-slate-400 mt-1">Across all connected accounts</p>
+                    </div>
+                </div>
+
+                <!-- Total Expenses Card -->
+                <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl relative overflow-hidden group hover:border-rose-500/50 transition-all">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-semibold uppercase tracking-wider text-slate-400">Total Expenses</span>
+                        <div class="w-9 h-9 rounded-lg bg-rose-500/10 text-rose-400 flex items-center justify-center">
+                            <i class="fa-solid fa-circle-arrow-up"></i>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <h3 class="text-3xl font-extrabold text-rose-400 tracking-tight" id="dash-total-expenses">$0.00</h3>
+                        <p class="text-xs text-slate-400 mt-1">Operating & overhead costs</p>
+                    </div>
+                </div>
+
+                <!-- Active Accounts Card -->
+                <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl relative overflow-hidden group hover:border-indigo-500/50 transition-all">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-semibold uppercase tracking-wider text-slate-400">Active Portfolios</span>
+                        <div class="w-9 h-9 rounded-lg bg-indigo-500/10 text-indigo-400 flex items-center justify-center">
+                            <i class="fa-solid fa-building-columns"></i>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <h3 class="text-3xl font-extrabold text-white tracking-tight" id="dash-active-accounts">0</h3>
+                        <p class="text-xs text-blue-400 mt-1 cursor-pointer hover:underline" onclick="switchTab('accounts')">Manage Accounts &rarr;</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts & Ledger Quick Overview Section -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Revenue vs Expense Chart -->
+                <div class="lg:col-span-2 bg-slate-900 border border-slate-800 p-6 rounded-2xl">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-bold text-white">Financial Cash Flow Performance</h3>
+                        <span class="text-xs text-slate-400 bg-slate-800 px-3 py-1 rounded-full border border-slate-700">YTD Performance</span>
+                    </div>
+                    <div class="h-64 w-full relative">
+                        <canvas id="dashboardChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Recent Activity Feed -->
+                <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-lg font-bold text-white">Recent Transactions</h3>
+                            <button onclick="switchTab('ledger')" class="text-xs text-blue-400 hover:underline">View All</button>
+                        </div>
+                        <div id="dash-recent-list" class="space-y-3">
+                            <!-- Injected dynamically -->
+                        </div>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-slate-800">
+                        <button onclick="openModal('add-account-modal')" class="w-full py-2.5 bg-slate-800 hover:bg-slate-700 text-blue-400 font-medium rounded-xl text-sm border border-slate-700 transition-all text-center block">
+                            + Add New Bank / Wallet Account
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. ACCOUNTS MANAGEMENT TAB -->
+        <div id="tab-accounts" class="tab-content space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-slate-900 border border-slate-800 p-6 rounded-2xl">
+                <div>
+                    <h2 class="text-2xl font-bold text-white tracking-tight">Accounts & Portfolios</h2>
+                    <p class="text-slate-400 text-sm mt-1">Monitor all bank accounts, credit cards, and digital payment gateways.</p>
+                </div>
+                <button onclick="openModal('add-account-modal')" class="px-4 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-medium rounded-xl text-sm transition-all shadow-lg shadow-blue-600/30 flex items-center gap-2">
+                    <i class="fa-solid fa-plus-circle"></i> Connect New Account
+                </button>
+            </div>
+
+            <!-- Accounts Grid -->
+            <div id="accounts-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Dynamic cards injected via Javascript -->
+            </div>
+        </div>
+
+        <!-- 3. TRANSACTIONS LEDGER TAB -->
+        <div id="tab-ledger" class="tab-content space-y-6">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-slate-900 border border-slate-800 p-6 rounded-2xl">
+                <div>
+                    <h2 class="text-2xl font-bold text-white tracking-tight">Transactions Ledger</h2>
+                    <p class="text-slate-400 text-sm mt-1">Complete searchable record of incoming revenue and outgoing operational expenses.</p>
+                </div>
+                <button onclick="openModal('add-transaction-modal')" class="px-4 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-medium rounded-xl text-sm transition-all shadow-lg shadow-blue-600/30 flex items-center gap-2">
+                    <i class="fa-solid fa-plus"></i> New Entry
+                </button>
+            </div>
+
+            <!-- Filter and Search Bar -->
+            <div class="bg-slate-900 border border-slate-800 p-4 rounded-2xl flex flex-col md:flex-row gap-4 justify-between items-center">
+                <div class="w-full md:w-80 relative">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3.5 text-slate-500"></i>
+                    <input type="text" id="ledger-search" oninput="renderLedgerTable()" placeholder="Search description, category..." class="w-full bg-slate-800 border border-slate-700 rounded-xl pl-10 pr-4 py-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                </div>
+                <div class="flex flex-wrap items-center gap-3 w-full md:w-auto">
+                    <select id="ledger-filter-type" onchange="renderLedgerTable()" class="bg-slate-800 border border-slate-700 text-slate-300 text-sm rounded-xl px-3 py-2 focus:outline-none focus:border-blue-500">
+                        <option value="all">All Types</option>
+                        <option value="income">Income Only</option>
+                        <option value="expense">Expense Only</option>
+                    </select>
+                    <select id="ledger-filter-account" onchange="renderLedgerTable()" class="bg-slate-800 border border-slate-700 text-slate-300 text-sm rounded-xl px-3 py-2 focus:outline-none focus:border-blue-500">
+                        <option value="all">All Accounts</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Transactions Table -->
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm text-slate-300">
+                        <thead class="bg-slate-800/80 text-xs uppercase tracking-wider text-slate-400 border-b border-slate-800">
+                            <tr>
+                                <th class="px-6 py-4">Date</th>
+                                <th class="px-6 py-4">Description</th>
+                                <th class="px-6 py-4">Category</th>
+                                <th class="px-6 py-4">Account</th>
+                                <th class="px-6 py-4 text-right">Amount</th>
+                                <th class="px-6 py-4 text-center">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ledger-table-body" class="divide-y divide-slate-800">
+                            <!-- Injected dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. ANALYTICS & REPORTS TAB -->
+        <div id="tab-analytics" class="tab-content space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-slate-900 border border-slate-800 p-6 rounded-2xl">
+                <div>
+                    <h2 class="text-2xl font-bold text-white tracking-tight">Analytics & Financial Reports</h2>
+                    <p class="text-slate-400 text-sm mt-1">Deep breakdown of spending distribution and revenue trends.</p>
+                </div>
+                <button onclick="exportFinancialStatement()" class="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-medium rounded-xl text-sm transition-all shadow-lg shadow-emerald-600/20 flex items-center gap-2">
+                    <i class="fa-solid fa-file-pdf"></i> Download Official Statement
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Expense Distribution Chart -->
+                <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl">
+                    <h3 class="text-lg font-bold text-white mb-4">Expense Breakdown by Category</h3>
+                    <div class="h-64 relative flex items-center justify-center">
+                        <canvas id="expenseCategoryChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Income Stream Chart -->
+                <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl">
+                    <h3 class="text-lg font-bold text-white mb-4">Revenue Stream Analysis</h3>
+                    <div class="h-64 relative flex items-center justify-center">
+                        <canvas id="incomeCategoryChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5. PRICING & PURCHASE PORTAL TAB -->
+        <div id="tab-pricing" class="tab-content space-y-8 py-4">
+            <div class="text-center max-w-3xl mx-auto space-y-3">
+                <span class="px-3 py-1 bg-blue-500/10 text-blue-400 border border-blue-500/20 rounded-full text-xs font-semibold tracking-wide uppercase">Official Commercial Software</span>
+                <h2 class="text-4xl font-extrabold text-white tracking-tight">Select Your License Plan</h2>
+                <p class="text-slate-400 text-base">Empower your brand with full access to Finance Manager by MV Software Empire. Instant deployment with integrated secure payment processing.</p>
+            </div>
+
+            <!-- Pricing Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                <!-- Standard Plan -->
+                <div class="bg-slate-900 border border-slate-800 rounded-3xl p-8 flex flex-col justify-between hover:border-blue-500/40 transition-all relative">
+                    <div>
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-xl font-bold text-white">Standard License</h3>
+                            <span class="text-xs px-2.5 py-1 bg-slate-800 text-slate-300 rounded-md border border-slate-700">Small Businesses</span>
+                        </div>
+                        <div class="mt-6 mb-6">
+                            <span class="text-4xl font-black text-white">$29.99</span>
+                            <span class="text-slate-400 text-sm"> / one-time</span>
+                        </div>
+                        <ul class="space-y-3 text-slate-300 text-sm mb-8">
+                            <li class="flex items-center gap-3"><i class="fa-solid fa-circle-check text-emerald-400"></i> Single-user Executive Dashboard</li>
+                            <li class="flex items-center gap-3"><i class="fa-solid fa-circle-check text-emerald-400"></i> Up to 5 Bank Account Integrations</li>
+                            <li class="flex items-center gap-3"><i class="fa-solid fa-circle-check text-emerald-400"></i> Complete Transactions Ledger</li>
+                            <li class="flex items-center gap-3"><i class="fa-solid fa-circle-check text-emerald-400"></i> Export Financial Statements</li>
+                            <li class="flex items-center gap-3 text-slate-500"><i class="fa-solid fa-circle-xmark"></i> Multi-User Client Access Portal</li>
+                        </ul>
+                    </div>
+
+                    <!-- PayPal Purchase Button Simulation -->
+                    <div class="space-y-3">
+                        <button onclick="simulatePayPalPurchase('Standard License', '$29.99')" class="w-full py-3.5 bg-yellow-500 hover:bg-yellow-400 text-slate-950 font-bold rounded-xl transition-all shadow-lg shadow-yellow-500/20 flex items-center justify-center gap-2">
+                            <i class="fa-brands fa-paypal text-lg"></i> Pay with PayPal ($29.99)
+                        </button>
+                        <p class="text-center text-xs text-slate-500">Fast & Secure checkout via PayPal Sandbox</p>
+                    </div>
+                </div>
+
+                <!-- Pro Plan -->
+                <div class="bg-slate-900 border-2 border-blue-500/80 rounded-3xl p-8 flex flex-col justify-between shadow-2xl shadow-blue-500/10 relative">
+                    <div class="absolute -top-4 right-8 bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full shadow-md">
+                        Recommended
+                    </div>
+                    <div>
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-xl font-bold text-white">Pro Executive License</h3>
+                            <span class="text-xs px-2.5 py-1 bg-blue-500/20 text-blue-300 rounded-md border border-blue-500/30">Enterprises & Teams</span>
+                        </div>
+                        <div class="mt-6 mb-6">
+                            <span class="text-4xl font-black text-white">$59.99</span>
+                            <span class="text-slate-400 text-sm"> / one-time</span>
+                        </div>
+                        <ul class="space-y-3 text-slate-300 text-sm mb-8">
+                            <li class="flex items-center gap-3"><i class="fa-solid fa-circle-check text-emerald-400"></i> Unlimited Executive Dashboards</li>
+                            <li class="flex items-center gap-3"><i class="fa-solid fa-circle-check text-emerald-400"></i> Unlimited Bank Accounts & Portfolios</li>
+                            <li class="flex items-center gap-3"><i class="fa-solid fa-circle-check text-emerald-400"></i> Real-time Automated Analytics</li>
+                            <li class="flex items-center gap-3"><i class="fa-solid fa-circle-check text-emerald-400"></i> Dedicated Client Access Portal</li>
+                            <li class="flex items-center gap-3"><i class="fa-solid fa-circle-check text-emerald-400"></i> 24/7 Priority Support from MV Empire</li>
+                        </ul>
+                    </div>
+
+                    <!-- PayPal Purchase Button Simulation -->
+                    <div class="space-y-3">
+                        <button onclick="simulatePayPalPurchase('Pro Executive License', '$59.99')" class="w-full py-3.5 bg-yellow-500 hover:bg-yellow-400 text-slate-950 font-bold rounded-xl transition-all shadow-lg shadow-yellow-500/20 flex items-center justify-center gap-2">
+                            <i class="fa-brands fa-paypal text-lg"></i> Pay with PayPal ($59.99)
+                        </button>
+                        <p class="text-center text-xs text-slate-500">Instant Activation upon payment confirmation</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 6. CUSTOMER ACCESS / LOGIN PORTAL TAB -->
+        <div id="tab-customer-portal" class="tab-content max-w-lg mx-auto py-6">
+            <div class="bg-slate-900 border border-slate-800 rounded-3xl p-8 shadow-2xl">
+                <div class="text-center mb-6">
+                    <div class="w-14 h-14 bg-blue-600/10 border border-blue-500/20 text-blue-400 rounded-2xl flex items-center justify-center mx-auto mb-3">
+                        <i class="fa-solid fa-user-gear text-2xl"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold text-white">Client Access Portal</h2>
+                    <p class="text-slate-400 text-sm mt-1">Enter your registered customer details to access your application workspace.</p>
+                </div>
+
+                <form id="customer-login-form" onsubmit="handleCustomerLogin(event)" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Company / Client Name</label>
+                        <input type="text" id="cust-name" required placeholder="e.g. Acme Corp or John Doe" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Registered Email Address</label>
+                        <input type="email" id="cust-email" required placeholder="client@domain.com" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold uppercase text-slate-400 mb-1">License Access Key</label>
+                        <input type="text" id="cust-key" required placeholder="MV-XXXX-XXXX-2026" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500 font-mono">
+                    </div>
+
+                    <button type="submit" class="w-full py-3 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-xl text-sm transition-all shadow-lg shadow-blue-600/30 flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-right-to-bracket"></i> Login to Workspace
+                    </button>
+                </form>
+
+                <div class="mt-6 text-center border-t border-slate-800 pt-4">
+                    <p class="text-xs text-slate-500">Don't have a license key yet?</p>
+                    <button onclick="switchTab('pricing')" class="text-xs text-blue-400 hover:underline mt-1 font-medium">Purchase a plan on our Pricing Portal &rarr;</button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 border-t border-slate-800 py-6 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-4">
+            <div class="text-slate-400 text-sm">
+                &copy; 2026 <span class="text-white font-semibold">MV Software Empire</span>. All rights reserved.
+            </div>
+            <div class="flex items-center space-x-6 text-sm text-slate-400">
+                <a href="#" onclick="showToast('Security & Data Encryption active.', 'info'); return false;" class="hover:text-white">Security</a>
+                <a href="#" onclick="switchTab('pricing'); return false;" class="hover:text-white">Buy License</a>
+                <a href="#" onclick="switchTab('customer-portal'); return false;" class="hover:text-white">Client Portal</a>
+            </div>
+        </div>
     </footer>
 
+    <!-- ADD ACCOUNT MODAL -->
+    <div id="add-account-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-6 shadow-2xl">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-bold text-white">Add New Account</h3>
+                <button onclick="closeModal('add-account-modal')" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <form onsubmit="handleAddAccount(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Account Title</label>
+                    <input type="text" id="acc-name" required placeholder="e.g. Chase Business, PayPal" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3.5 py-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Account Type</label>
+                    <select id="acc-type" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3.5 py-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                        <option value="Checking">Checking Account</option>
+                        <option value="Savings">Savings Account</option>
+                        <option value="Credit Card">Credit Card</option>
+                        <option value="PayPal / Merchant">PayPal / Merchant</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Initial Balance ($)</label>
+                    <input type="number" step="0.01" id="acc-balance" required placeholder="0.00" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3.5 py-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                </div>
+                <div class="flex items-center justify-end space-x-3 pt-2">
+                    <button type="button" onclick="closeModal('add-account-modal')" class="px-4 py-2 bg-slate-800 text-slate-300 rounded-xl text-sm font-medium hover:bg-slate-700">Cancel</button>
+                    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-xl text-sm font-medium hover:bg-blue-500">Create Account</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ADD TRANSACTION MODAL -->
+    <div id="add-transaction-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-6 shadow-2xl">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-bold text-white">Log Transaction</h3>
+                <button onclick="closeModal('add-transaction-modal')" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <form onsubmit="handleAddTransaction(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Type</label>
+                    <select id="tx-type" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3.5 py-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                        <option value="income">Income (+ Revenue)</option>
+                        <option value="expense">Expense (- Cost)</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Description</label>
+                    <input type="text" id="tx-desc" required placeholder="e.g. Client Payment, Server Bill" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3.5 py-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Amount ($)</label>
+                    <input type="number" step="0.01" id="tx-amount" required placeholder="0.00" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3.5 py-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Category</label>
+                    <input type="text" id="tx-category" required placeholder="e.g. Sales, Utilities, Payroll" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3.5 py-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Target Account</label>
+                    <select id="tx-account" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3.5 py-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                        <!-- Populated dynamically -->
+                    </select>
+                </div>
+                <div class="flex items-center justify-end space-x-3 pt-2">
+                    <button type="button" onclick="closeModal('add-transaction-modal')" class="px-4 py-2 bg-slate-800 text-slate-300 rounded-xl text-sm font-medium hover:bg-slate-700">Cancel</button>
+                    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-xl text-sm font-medium hover:bg-blue-500">Record Entry</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- APPLICATION LOGIC & JAVASCRIPT -->
+    <script>
+        // Initial Application Data State
+        let state = {
+            accounts: [
+                { id: '1', name: 'MV Operating Account', type: 'Checking', balance: 14250.00 },
+                { id: '2', name: 'PayPal Gateway', type: 'PayPal / Merchant', balance: 4170.80 }
+            ],
+            transactions: [
+                { id: 't1', date: '2026-03-01', description: 'Enterprise License Sales', category: 'Sales', type: 'income', amount: 3500.00, accountId: '2' },
+                { id: 't2', date: '2026-03-02', description: 'AWS Cloud Hosting', category: 'Infrastructure', type: 'expense', amount: 420.00, accountId: '1' },
+                { id: 't3', date: '2026-03-03', description: 'Software Support Contract', category: 'Services', type: 'income', amount: 1250.00, accountId: '1' }
+            ]
+        };
+
+        // Chart References
+        let mainChartObj = null;
+        let expenseChartObj = null;
+        let incomeChartObj = null;
+
+        window.onload = function() {
+            renderApp();
+            initCharts();
+        };
+
+        // Navigation Tab Switcher
+        function switchTab(tabId) {
+            // Hide all tabs
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => tab.classList.remove('active'));
+
+            // Deactivate all buttons
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(btn => {
+                btn.classList.remove('text-blue-400', 'bg-slate-800', 'border', 'border-blue-500/30');
+                btn.classList.add('text-slate-300');
+            });
+
+            // Activate chosen tab
+            const targetTab = document.getElementById('tab-' + tabId);
+            if (targetTab) {
+                targetTab.classList.add('active');
+            }
+
+            // Highlight nav button
+            const targetBtn = document.getElementById('nav-' + tabId);
+            if (targetBtn) {
+                targetBtn.classList.add('text-blue-400', 'bg-slate-800', 'border', 'border-blue-500/30');
+                targetBtn.classList.remove('text-slate-300');
+            }
+
+            // Close mobile menu if open
+            document.getElementById('mobile-menu').classList.add('hidden');
+
+            // Re-render charts when changing tabs to prevent sizing issues
+            if (tabId === 'dashboard' || tabId === 'analytics') {
+                setTimeout(updateCharts, 100);
+            }
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        // Render Application UI Elements
+        function renderApp() {
+            calculateBalances();
+            renderAccountsGrid();
+            renderLedgerTable();
+            renderAccountDropdowns();
+            renderRecentActivity();
+        }
+
+        function calculateBalances() {
+            let totalIncome = 0;
+            let totalExpenses = 0;
+
+            state.transactions.forEach(t => {
+                if (t.type === 'income') totalIncome += t.amount;
+                if (t.type === 'expense') totalExpenses += t.amount;
+            });
+
+            let totalNetBalance = state.accounts.reduce((sum, acc) => sum + acc.balance, 0);
+
+            document.getElementById('dash-total-balance').textContent = `$${totalNetBalance.toLocaleString('en-US', {minimumFractionDigits: 2})}`;
+            document.getElementById('dash-total-income').textContent = `$${totalIncome.toLocaleString('en-US', {minimumFractionDigits: 2})}`;
+            document.getElementById('dash-total-expenses').textContent = `$${totalExpenses.toLocaleString('en-US', {minimumFractionDigits: 2})}`;
+            document.getElementById('dash-active-accounts').textContent = state.accounts.length;
+        }
+
+        function renderAccountsGrid() {
+            const container = document.getElementById('accounts-grid');
+            container.innerHTML = '';
+
+            state.accounts.forEach(acc => {
+                const card = document.createElement('div');
+                card.className = 'bg-slate-900 border border-slate-800 p-6 rounded-2xl flex flex-col justify-between hover:border-blue-500/30 transition-all';
+                card.innerHTML = `
+                    <div>
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-xs font-semibold uppercase text-blue-400 bg-blue-500/10 px-2.5 py-1 rounded-md border border-blue-500/20">${acc.type}</span>
+                            <button onclick="deleteAccount('${acc.id}')" class="text-slate-500 hover:text-rose-400 transition-colors text-xs"><i class="fa-solid fa-trash-can"></i> Remove</button>
+                        </div>
+                        <h4 class="text-xl font-bold text-white mb-1">${acc.name}</h4>
+                        <p class="text-xs text-slate-400">Account ID: #${acc.id}</p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-slate-800 flex items-end justify-between">
+                        <div>
+                            <span class="text-xs text-slate-400 block">Available Balance</span>
+                            <span class="text-2xl font-extrabold text-white tracking-tight">$${acc.balance.toLocaleString('en-US', {minimumFractionDigits: 2})}</span>
+                        </div>
+                        <div class="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-slate-400">
+                            <i class="fa-solid fa-building-columns text-xs"></i>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function renderLedgerTable() {
+            const tbody = document.getElementById('ledger-table-body');
+            const search = document.getElementById('ledger-search').value.toLowerCase();
+            const filterType = document.getElementById('ledger-filter-type').value;
+            const filterAcc = document.getElementById('ledger-filter-account').value;
+
+            tbody.innerHTML = '';
+
+            const filtered = state.transactions.filter(t => {
+                const matchesSearch = t.description.toLowerCase().includes(search) || t.category.toLowerCase().includes(search);
+                const matchesType = filterType === 'all' || t.type === filterType;
+                const matchesAcc = filterAcc === 'all' || t.accountId === filterAcc;
+                return matchesSearch && matchesType && matchesAcc;
+            });
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" class="text-center py-8 text-slate-500">No transaction entries found.</td></tr>`;
+                return;
+            }
+
+            filtered.forEach(t => {
+                const acc = state.accounts.find(a => a.id === t.accountId);
+                const accName = acc ? acc.name : 'General Account';
+
+                const tr = document.createElement('tr');
+                tr.className = 'hover:bg-slate-800/40 transition-colors';
+                tr.innerHTML = `
+                    <td class="px-6 py-4 font-mono text-xs text-slate-400">${t.date}</td>
+                    <td class="px-6 py-4 font-medium text-white">${t.description}</td>
+                    <td class="px-6 py-4"><span class="px-2.5 py-1 bg-slate-800 text-slate-300 text-xs rounded-md border border-slate-700">${t.category}</span></td>
+                    <td class="px-6 py-4 text-xs text-slate-400">${accName}</td>
+                    <td class="px-6 py-4 text-right font-bold ${t.type === 'income' ? 'text-emerald-400' : 'text-rose-400'}">
+                        ${t.type === 'income' ? '+' : '-'}$${t.amount.toLocaleString('en-US', {minimumFractionDigits: 2})}
+                    </td>
+                    <td class="px-6 py-4 text-center">
+                        <button onclick="deleteTransaction('${t.id}')" class="text-slate-500 hover:text-rose-400 transition-colors"><i class="fa-solid fa-trash-can"></i></button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function renderRecentActivity() {
+            const container = document.getElementById('dash-recent-list');
+            container.innerHTML = '';
+
+            const recent = [...state.transactions].reverse().slice(0, 4);
+
+            if (recent.length === 0) {
+                container.innerHTML = `<p class="text-xs text-slate-500 py-4">No recent activity.</p>`;
+                return;
+            }
+
+            recent.forEach(t => {
+                const item = document.createElement('div');
+                item.className = 'flex items-center justify-between p-3 rounded-xl bg-slate-800/40 border border-slate-800/60';
+                item.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-lg ${t.type === 'income' ? 'bg-emerald-500/10 text-emerald-400' : 'bg-rose-500/10 text-rose-400'} flex items-center justify-center">
+                            <i class="fa-solid ${t.type === 'income' ? 'fa-arrow-down' : 'fa-arrow-up'} text-xs"></i>
+                        </div>
+                        <div>
+                            <p class="text-xs font-semibold text-white leading-snug">${t.description}</p>
+                            <span class="text-[10px] text-slate-400">${t.date}</span>
+                        </div>
+                    </div>
+                    <span class="text-xs font-bold ${t.type === 'income' ? 'text-emerald-400' : 'text-rose-400'}">
+                        ${t.type === 'income' ? '+' : '-'}$${t.amount.toFixed(2)}
+                    </span>
+                `;
+                container.appendChild(item);
+            });
+        }
+
+        function renderAccountDropdowns() {
+            const txAccSelect = document.getElementById('tx-account');
+            const filterAccSelect = document.getElementById('ledger-filter-account');
+
+            txAccSelect.innerHTML = '';
+            filterAccSelect.innerHTML = '<option value="all">All Accounts</option>';
+
+            state.accounts.forEach(acc => {
+                const opt1 = document.createElement('option');
+                opt1.value = acc.id;
+                opt1.textContent = acc.name;
+                txAccSelect.appendChild(opt1);
+
+                const opt2 = document.createElement('option');
+                opt2.value = acc.id;
+                opt2.textContent = acc.name;
+                filterAccSelect.appendChild(opt2);
+            });
+        }
+
+        // Account & Transaction Handlers
+        function handleAddAccount(e) {
+            e.preventDefault();
+            const name = document.getElementById('acc-name').value;
+            const type = document.getElementById('acc-type').value;
+            const balance = parseFloat(document.getElementById('acc-balance').value) || 0;
+
+            const newAcc = {
+                id: Date.now().toString(),
+                name: name,
+                type: type,
+                balance: balance
+            };
+
+            state.accounts.push(newAcc);
+            renderApp();
+            updateCharts();
+            closeModal('add-account-modal');
+            e.target.reset();
+            showToast('Account successfully created!', 'success');
+        }
+
+        function deleteAccount(id) {
+            state.accounts = state.accounts.filter(a => a.id !== id);
+            renderApp();
+            updateCharts();
+            showToast('Account removed.', 'info');
+        }
+
+        function handleAddTransaction(e) {
+            e.preventDefault();
+            const type = document.getElementById('tx-type').value;
+            const desc = document.getElementById('tx-desc').value;
+            const amount = parseFloat(document.getElementById('tx-amount').value) || 0;
+            const category = document.getElementById('tx-category').value;
+            const accountId = document.getElementById('tx-account').value;
+
+            const newTx = {
+                id: 't' + Date.now(),
+                date: new Date().toISOString().split('T')[0],
+                description: desc,
+                category: category,
+                type: type,
+                amount: amount,
+                accountId: accountId
+            };
+
+            // Update associated account balance
+            const acc = state.accounts.find(a => a.id === accountId);
+            if (acc) {
+                if (type === 'income') acc.balance += amount;
+                else acc.balance -= amount;
+            }
+
+            state.transactions.push(newTx);
+            renderApp();
+            updateCharts();
+            closeModal('add-transaction-modal');
+            e.target.reset();
+            showToast('Transaction logged successfully!', 'success');
+        }
+
+        function deleteTransaction(id) {
+            const tx = state.transactions.find(t => t.id === id);
+            if (tx) {
+                const acc = state.accounts.find(a => a.id === tx.accountId);
+                if (acc) {
+                    if (tx.type === 'income') acc.balance -= tx.amount;
+                    else acc.balance += tx.amount;
+                }
+            }
+            state.transactions = state.transactions.filter(t => t.id !== id);
+            renderApp();
+            updateCharts();
+            showToast('Transaction entry deleted.', 'info');
+        }
+
+        // Charts Logic
+        function initCharts() {
+            // Main Line Chart
+            const ctx1 = document.getElementById('dashboardChart').getContext('2d');
+            mainChartObj = new Chart(ctx1, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                    datasets: [
+                        {
+                            label: 'Revenue ($)',
+                            data: [4200, 5100, 6800, 7200, 8500, 9400],
+                            borderColor: '#3b82f6',
+                            backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                            fill: true,
+                            tension: 0.4
+                        },
+                        {
+                            label: 'Expenses ($)',
+                            data: [2100, 2300, 3100, 2900, 3400, 3200],
+                            borderColor: '#f43f5e',
+                            backgroundColor: 'rgba(244, 63, 94, 0.05)',
+                            fill: true,
+                            tension: 0.4
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { labels: { color: '#94a3b8' } } },
+                    scales: {
+                        x: { ticks: { color: '#64748b' }, grid: { color: '#1e293b' } },
+                        y: { ticks: { color: '#64748b' }, grid: { color: '#1e293b' } }
+                    }
+                }
+            });
+
+            // Expense Breakdown Doughnut Chart
+            const ctx2 = document.getElementById('expenseCategoryChart').getContext('2d');
+            expenseChartObj = new Chart(ctx2, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Infrastructure', 'Payroll', 'Services', 'Utilities'],
+                    datasets: [{
+                        data: [420, 1500, 600, 250],
+                        backgroundColor: ['#3b82f6', '#8b5cf6', '#ec4899', '#f59e0b']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { position: 'bottom', labels: { color: '#94a3b8' } } }
+                }
+            });
+
+            // Revenue Stream Chart
+            const ctx3 = document.getElementById('incomeCategoryChart').getContext('2d');
+            incomeChartObj = new Chart(ctx3, {
+                type: 'bar',
+                data: {
+                    labels: ['Software Sales', 'Support Contracts', 'Consulting'],
+                    datasets: [{
+                        label: 'Revenue Generated',
+                        data: [4750, 2100, 1400],
+                        backgroundColor: '#10b981'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        x: { ticks: { color: '#64748b' }, grid: { color: '#1e293b' } },
+                        y: { ticks: { color: '#64748b' }, grid: { color: '#1e293b' } }
+                    }
+                }
+            });
+        }
+
+        function updateCharts() {
+            if (mainChartObj) mainChartObj.update();
+            if (expenseChartObj) expenseChartObj.update();
+            if (incomeChartObj) incomeChartObj.update();
+        }
+
+        // PayPal Purchase Simulation & Portal Login
+        function simulatePayPalPurchase(planName, price) {
+            showToast(`Connecting to PayPal Sandbox for ${planName}...`, 'info');
+            setTimeout(() => {
+                showToast(`SUCCESS: Purchased ${planName} for ${price}! Key generated.`, 'success');
+                switchTab('customer-portal');
+            }, 1800);
+        }
+
+        function handleCustomerLogin(e) {
+            e.preventDefault();
+            const name = document.getElementById('cust-name').value;
+            showToast(`Welcome back, ${name}! Authenticating session...`, 'success');
+            setTimeout(() => {
+                switchTab('dashboard');
+            }, 1000);
+        }
+
+        // Export Statement Simulation
+        function exportFinancialStatement() {
+            showToast('Generating MV Software Empire Financial Report PDF...', 'info');
+            setTimeout(() => {
+                showToast('Financial Statement downloaded successfully!', 'success');
+            }, 1500);
+        }
+
+        // UI Modals & Toast Helpers
+        function openModal(id) {
+            document.getElementById(id).classList.remove('hidden');
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.add('hidden');
+        }
+
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+           
+            const colorClass = type === 'success' ? 'bg-emerald-600 border-emerald-500' : 'bg-blue-600 border-blue-500';
+            const icon = type === 'success' ? 'fa-circle-check' : 'fa-circle-info';
+
+            toast.className = `pointer-events-auto flex items-center gap-3 px-4 py-3 rounded-xl text-white text-sm shadow-xl border ${colorClass} transition-all animate-bounce`;
+            toast.innerHTML = `<i class="fa-solid ${icon}"></i> <span>${message}</span>`;
+           
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.remove();
+            }, 3500);
+        }
+    </script>
 </body>
 </html>
+```
+
