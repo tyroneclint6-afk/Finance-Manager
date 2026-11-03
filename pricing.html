@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pricing Plans - MV Software Empire</title>
+    
+    <!-- PayPal JavaScript SDK (Live Client ID Integrated) -->
+    <script src="https://www.paypal.com/sdk/js?client-id=BAAAflAGEbM_3wYtvFawuob58UP96kpUX2krvlq2-m4kN2DOVmLT1kpD42OD05q-RgPy4pVueXIn5C&currency=USD"></script>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f4f6f9;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .pricing-container {
+            max-width: 900px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .pricing-header {
+            margin-bottom: 40px;
+        }
+
+        .pricing-header h1 {
+            font-size: 2.5rem;
+            color: #1a1a1a;
+            margin-bottom: 10px;
+        }
+
+        .pricing-header p {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .cards-wrapper {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .card {
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            padding: 30px;
+            width: 320px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: transform 0.2s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card h2 {
+            font-size: 1.5rem;
+            color: #0070ba;
+            margin-bottom: 15px;
+        }
+
+        .price {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+
+        .price span {
+            font-size: 1rem;
+            color: #7f8c8d;
+        }
+
+        .features {
+            list-style: none;
+            text-align: left;
+            margin-bottom: 25px;
+        }
+
+        .features li {
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+            color: #555;
+        }
+
+        .paypal-button-container {
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="pricing-container">
+    <div class="pricing-header">
+        <h1>Finance Manager Access</h1>
+        <p>Choose your plan to unlock full software features.</p>
+    </div>
+
+    <div class="cards-wrapper">
+        <!-- Standard License Card -->
+        <div class="card">
+            <div>
+                <h2>Standard Plan</h2>
+                <div class="price">$29.99 <span>/ one-time</span></div>
+                <ul class="features">
+                    <li>✓ Full Finance Manager Access</li>
+                    <li>✓ Database Integration</li>
+                    <li>✓ Standard Support</li>
+                </ul>
+            </div>
+            
+            <!-- PayPal Button Render Area -->
+            <div id="paypal-button-container-standard" class="paypal-button-container"></div>
+        </div>
+
+        <!-- Pro License Card -->
+        <div class="card">
+            <div>
+                <h2>Pro Plan</h2>
+                <div class="price">$49.99 <span>/ one-time</span></div>
+                <ul class="features">
+                    <li>✓ Full Access + Advanced Analytics</li>
+                    <li>✓ Custom Database Setup</li>
+                    <li>✓ Priority Support</li>
+                </ul>
+            </div>
+
+            <!-- PayPal Button Render Area -->
+            <div id="paypal-button-container-pro" class="paypal-button-container"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Standard Plan Button ($29.99)
+    paypal.Buttons({
+        style: {
+            shape: 'rect',
+            color: 'gold',
+            layout: 'vertical',
+            label: 'paypal'
+        },
+        createOrder: function(data, actions) {
+            return actions.order.create({
+                purchase_units: [{
+                    description: "Finance Manager Standard License",
+                    amount: {
+                        value: '29.99'
+                    }
+                }]
+            });
+        },
+        onApprove: function(data, actions) {
+            return actions.order.capture().then(function(details) {
+                alert('Transaction completed by ' + details.payer.name.given_name + '! Access granted.');
+                // Redirect or update backend database here
+            });
+        },
+        onError: function(err) {
+            console.error('PayPal Error:', err);
+            alert('An error occurred during payment. Please try again.');
+        }
+    }).render('#paypal-button-container-standard');
+
+    // Pro Plan Button ($49.99)
+    paypal.Buttons({
+        style: {
+            shape: 'rect',
+            color: 'blue',
+            layout: 'vertical',
+            label: 'paypal'
+        },
+        createOrder: function(data, actions) {
+            return actions.order.create({
+                purchase_units: [{
+                    description: "Finance Manager Pro License",
+                    amount: {
+                        value: '49.99'
+                    }
+                }]
+            });
+        },
+        onApprove: function(data, actions) {
+            return actions.order.capture().then(function(details) {
+                alert('Transaction completed by ' + details.payer.name.given_name + '! Pro access granted.');
+                // Redirect or update backend database here
+            });
+        },
+        onError: function(err) {
+            console.error('PayPal Error:', err);
+            alert('An error occurred during payment. Please try again.');
+        }
+    }).render('#paypal-button-container-pro');
+</script>
+
+</body>
+</html>
+
