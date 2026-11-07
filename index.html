@@ -37,6 +37,9 @@
             padding: 1rem 2rem;
             background-color: var(--card-bg);
             border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
         .logo-area {
@@ -46,6 +49,7 @@
             font-weight: bold;
             font-size: 1.25rem;
             color: var(--accent-blue);
+            cursor: pointer;
         }
 
         .nav-links {
@@ -60,10 +64,13 @@
             text-decoration: none;
             color: var(--text-muted);
             transition: color 0.2s;
+            cursor: pointer;
         }
 
         .nav-links a:hover, .nav-links a.active {
             color: var(--accent-blue);
+            border-bottom: 2px solid var(--accent-blue);
+            padding-bottom: 4px;
         }
 
         .btn-cta {
@@ -75,11 +82,12 @@
             text-decoration: none;
             border: none;
             cursor: pointer;
-            transition: opacity 0.2s;
+            transition: opacity 0.2s, transform 0.1s;
         }
 
         .btn-cta:hover {
             opacity: 0.9;
+            transform: translateY(-1px);
         }
 
         /* Hero Section */
@@ -140,6 +148,17 @@
             color: var(--text-muted);
         }
 
+        /* View Panels */
+        .tab-panel {
+            display: none;
+        }
+
+        .tab-panel.active {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
         /* Telemetry Mock Graphics / Charts */
         .chart-mock {
             width: 100%;
@@ -156,7 +175,7 @@
             flex: 1;
             background: linear-gradient(to top, rgba(0, 176, 255, 0.2), var(--accent-blue));
             border-radius: 4px 4px 0 0;
-            transition: height 0.3s;
+            transition: height 0.5s ease-in-out;
         }
 
         .bar.positive {
@@ -177,6 +196,7 @@
             border: 1px solid var(--accent-blue);
             border-radius: 12px;
             padding: 1.5rem;
+            transition: all 0.3s ease;
         }
 
         .checkout-title {
@@ -249,100 +269,138 @@
             color: var(--text-muted);
             margin-top: 1rem;
         }
+
+        .toast-msg {
+            display: none;
+            background-color: var(--accent-color);
+            color: #000;
+            padding: 0.75rem 1rem;
+            border-radius: 6px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
     </style>
 </head>
 <body>
 
     <!-- Navigation Bar -->
     <nav>
-        <div class="logo-area">
+        <div class="logo-area" onclick="switchTab('dashboard')">
             <span>🛡️ MVSE</span>
             <span style="font-size: 0.85rem; color: var(--text-muted); font-weight: normal;">Finance Manager</span>
         </div>
         <ul class="nav-links">
-            <li><a href="#" class="active">Dashboard</a></li>
-            <li><a href="#">Markets</a></li>
-            <li><a href="#">Analysis</a></li>
-            <li><a href="#">Security</a></li>
-            <li><a href="#">Support</a></li>
+            <li><a id="nav-dashboard" class="active" onclick="switchTab('dashboard')">Dashboard</a></li>
+            <li><a id="nav-markets" onclick="switchTab('markets')">Markets</a></li>
+            <li><a id="nav-analysis" onclick="switchTab('analysis')">Analysis</a></li>
+            <li><a id="nav-security" onclick="switchTab('security')">Security</a></li>
+            <li><a id="nav-support" onclick="switchTab('support')">Support</a></li>
         </ul>
-        <button class="btn-cta">Log In / Sign Up</button>
+        <button class="btn-cta" onclick="focusCheckout()">Log In / Sign Up</button>
     </nav>
 
     <!-- Hero Section -->
     <header class="hero">
         <h1>MVSE Finance Manager: Master Your Portfolio, Real-Time Analytics</h1>
         <p>Advanced tools for the modern investor with real-time financial telemetry.</p>
-        <button class="btn-cta" style="font-size: 1rem; padding: 0.75rem 2rem;">Get Started for Free</button>
+        <button class="btn-cta" style="font-size: 1rem; padding: 0.75rem 2rem;" onclick="focusCheckout()">Get Started for Free</button>
     </header>
 
     <!-- Main Dashboard & Checkout Grid -->
     <div class="dashboard-container">
         
-        <!-- Left Column: Telemetry & Financial Charts -->
-        <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+        <!-- Left Column: Navigation View Panels -->
+        <div>
             
-            <!-- Portfolio Index Card -->
-            <div class="card">
-                <div class="card-header">
-                    <div>
-                        <div class="card-title">MVSE Global Portfolio Index</div>
-                        <div class="card-subtitle">Current: 148,765.20 USD <span style="color: var(--accent-color);">+2.15%</span></div>
+            <!-- Dashboard View -->
+            <div id="panel-dashboard" class="tab-panel active">
+                <div class="card">
+                    <div class="card-header">
+                        <div>
+                            <div class="card-title">MVSE Global Portfolio Index</div>
+                            <div class="card-subtitle">Current: <span id="portfolio-val">148,765.20</span> USD <span style="color: var(--accent-color);">+2.15%</span></div>
+                        </div>
+                        <span style="font-size: 0.85rem; color: var(--text-muted);">24H Vol: 5.4M</span>
                     </div>
-                    <span style="font-size: 0.85rem; color: var(--text-muted);">24H Vol: 5.4M</span>
+                    <div class="chart-mock" id="chart-portfolio"></div>
+                    <div class="line-graph-sim">
+                        <span>09:00</span>
+                        <span>12:00</span>
+                        <span>15:00</span>
+                        <span>18:00</span>
+                        <span style="color: var(--accent-color);">● Real-Time Telemetry Active</span>
+                    </div>
                 </div>
-                <!-- Simulated Live Chart Canvas / Graphics -->
-                <div class="chart-mock">
-                    <div class="bar" style="height: 40%;"></div>
-                    <div class="bar" style="height: 55%;"></div>
-                    <div class="bar" style="height: 45%;"></div>
-                    <div class="bar" style="height: 70%;"></div>
-                    <div class="bar" style="height: 60%;"></div>
-                    <div class="bar" style="height: 85%;"></div>
-                    <div class="bar positive" style="height: 75%;"></div>
-                    <div class="bar positive" style="height: 95%;"></div>
-                    <div class="bar positive" style="height: 80%;"></div>
-                    <div class="bar positive" style="height: 100%;"></div>
-                </div>
-                <div class="line-graph-sim">
-                    <span>09:00</span>
-                    <span>12:00</span>
-                    <span>15:00</span>
-                    <span>18:00</span>
-                    <span>Real-Time Stream Active</span>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div>
+                            <div class="card-title">AAPL/BTC/USD Performance Telemetry</div>
+                            <div class="card-subtitle">Multi-Asset Latency Feed & Analytics</div>
+                        </div>
+                    </div>
+                    <div class="chart-mock" id="chart-telemetry"></div>
                 </div>
             </div>
 
-            <!-- Performance Telemetry Card -->
-            <div class="card">
-                <div class="card-header">
-                    <div>
-                        <div class="card-title">AAPL/BTC/USD Performance Telemetry</div>
-                        <div class="card-subtitle">Multi-Asset Latency Feed & Analytics</div>
+            <!-- Markets View -->
+            <div id="panel-markets" class="tab-panel">
+                <div class="card">
+                    <div class="card-title">Global Markets & Assets</div>
+                    <div class="card-subtitle" style="margin-bottom: 1rem;">Real-time asset exchange tracking</div>
+                    <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                        <div class="plan-row"><span>NASDAQ Composite</span><span>18,420.50 (+1.2%)</span></div>
+                        <div class="plan-row"><span>Bitcoin / USD</span><span>$68,450.00 (+3.4%)</span></div>
+                        <div class="plan-row"><span>JSE Index (Jamaica)</span><span>324,150.10 (+0.8%)</span></div>
+                        <div class="plan-row"><span>Apple Inc. (AAPL)</span><span>$232.10 (+0.4%)</span></div>
                     </div>
                 </div>
-                <div class="chart-mock">
-                    <div class="bar positive" style="height: 30%;"></div>
-                    <div class="bar positive" style="height: 50%;"></div>
-                    <div class="bar" style="height: 40%;"></div>
-                    <div class="bar" style="height: 65%;"></div>
-                    <div class="bar positive" style="height: 80%;"></div>
-                    <div class="bar" style="height: 55%;"></div>
-                    <div class="bar" style="height: 70%;"></div>
-                    <div class="bar positive" style="height: 90%;"></div>
+            </div>
+
+            <!-- Analysis View -->
+            <div id="panel-analysis" class="tab-panel">
+                <div class="card">
+                    <div class="card-title">Predictive AI Analytics</div>
+                    <div class="card-subtitle" style="margin-bottom: 1rem;">Machine learning financial telemetry engine</div>
+                    <p style="color: var(--text-muted); font-size: 0.95rem;">
+                        Engine predictive model signals standard multi-asset continuation. Portfolio volatility index remains within optimal safe margins (< 4.2%).
+                    </p>
+                </div>
+            </div>
+
+            <!-- Security View -->
+            <div id="panel-security" class="tab-panel">
+                <div class="card">
+                    <div class="card-title">Security & Encryption Diagnostics</div>
+                    <div class="card-subtitle" style="margin-bottom: 1rem;">MVSE Vault Status: Active</div>
+                    <div style="color: var(--accent-color); font-weight: bold; margin-bottom: 0.5rem;">✔ 256-Bit SSL Encryption Active</div>
+                    <div style="color: var(--accent-color); font-weight: bold;">✔ Zero Trust Telemetry Protocol Active</div>
+                </div>
+            </div>
+
+            <!-- Support View -->
+            <div id="panel-support" class="tab-panel">
+                <div class="card">
+                    <div class="card-title">MVSE Help & Developer Support</div>
+                    <div class="card-subtitle" style="margin-bottom: 1rem;">24/7 Enterprise Assistance</div>
+                    <p style="color: var(--text-muted); margin-bottom: 1rem;">Have questions regarding API feeds or account management? Reach our engineering team.</p>
+                    <button class="btn-cta" onclick="alert('Support query submitted to MVSE Network.')">Contact Support</button>
                 </div>
             </div>
 
         </div>
 
         <!-- Right Column: Storefront Commercial Checkout Modal -->
-        <div>
-            <div class="checkout-box">
+        <div id="checkout-container">
+            <div class="checkout-box" id="checkout-card">
                 <div class="checkout-title">
                     <span>Complete Your MVSE Subscription</span>
-                    <span style="font-size: 1rem; cursor: pointer; color: var(--text-muted);">×</span>
+                    <span style="font-size: 1rem; cursor: pointer; color: var(--text-muted);" onclick="toggleCheckout(false)">×</span>
                 </div>
                 
+                <div id="toast" class="toast-msg">Transaction Simulation Complete!</div>
+
                 <div class="plan-summary">
                     <div class="plan-row">
                         <span>MVSE Pro Plan</span>
@@ -357,7 +415,7 @@
                     </div>
                 </div>
 
-                <form onsubmit="event.preventDefault(); alert('Transaction simulation complete!');">
+                <form id="checkout-form" onsubmit="handleCheckout(event)">
                     <div class="form-group">
                         <label>Billing Name</label>
                         <input type="text" class="form-control" value="Marvin Vassell" required>
@@ -371,7 +429,7 @@
                     <div class="form-row">
                         <div class="form-group">
                             <label>Expiry (MM/YY)</label>
-                            <input type="text" class="form-control" placeholder="MM/YY" required>
+                            <input type="text" class="form-control" placeholder="12/28" required>
                         </div>
                         <div class="form-group">
                             <label>CVV</label>
@@ -392,8 +450,83 @@
 
     </div>
 
+    <!-- Interactive Logic Script -->
+    <script>
+        // Tab Navigation Switcher
+        function switchTab(tabName) {
+            const tabs = ['dashboard', 'markets', 'analysis', 'security', 'support'];
+            tabs.forEach(tab => {
+                const navLink = document.getElementById(`nav-${tab}`);
+                const panel = document.getElementById(`panel-${tab}`);
+                if (navLink) navLink.classList.remove('active');
+                if (panel) panel.classList.remove('active');
+            });
+
+            const activeLink = document.getElementById(`nav-${tabName}`);
+            const activePanel = document.getElementById(`panel-${tabName}`);
+            if (activeLink) activeLink.classList.add('active');
+            if (activePanel) activePanel.classList.add('active');
+        }
+
+        // Live Telemetry Chart Simulation
+        function generateBars(containerId, count) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            container.innerHTML = '';
+            for (let i = 0; i < count; i++) {
+                const bar = document.createElement('div');
+                const height = Math.floor(Math.random() * 70) + 30;
+                const isPositive = Math.random() > 0.4;
+                bar.className = `bar ${isPositive ? 'positive' : ''}`;
+                bar.style.height = `${height}%`;
+                container.appendChild(bar);
+            }
+        }
+
+        function updateTelemetryData() {
+            generateBars('chart-portfolio', 10);
+            generateBars('chart-telemetry', 8);
+            
+            const valEl = document.getElementById('portfolio-val');
+            if (valEl) {
+                const baseVal = 148765.20;
+                const variation = (Math.random() * 200 - 100).toFixed(2);
+                valEl.innerText = (baseVal + parseFloat(variation)).toLocaleString('en-US', { minimumFractionDigits: 2 });
+            }
+        }
+
+        // Checkout Actions
+        function focusCheckout() {
+            toggleCheckout(true);
+            const card = document.getElementById('checkout-card');
+            if (card) {
+                card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                card.style.borderColor = 'var(--accent-color)';
+                setTimeout(() => card.style.borderColor = 'var(--accent-blue)', 1500);
+            }
+        }
+
+        function toggleCheckout(show) {
+            const card = document.getElementById('checkout-card');
+            if (card) card.style.display = show ? 'block' : 'none';
+        }
+
+        function handleCheckout(event) {
+            event.preventDefault();
+            const toast = document.getElementById('toast');
+            if (toast) {
+                toast.style.display = 'block';
+                setTimeout(() => { toast.style.display = 'none'; }, 4000);
+            }
+        }
+
+        // Init on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            generateBars('chart-portfolio', 10);
+            generateBars('chart-telemetry', 8);
+            setInterval(updateTelemetryData, 3000);
+        });
+    </script>
 </body>
 </html>
 
-
-   
